@@ -1,35 +1,31 @@
 import yfinance as yf
-import gymnasium as gym
-import gym_anytrading
+import matplotlib.pyplot as plt
 
-# Stable baselines - rl stuff
-from stable_baselines3.common.vec_env import DummyVecEnv
-from stable_baselines3 import A2C
-
-# Processing libraries
-import numpy as np
-
-import pandas as pd
-from matplotlib import pyplot as plt
-
-from eodhd import APIClient
 # Define the ticker symbol
 ticker_symbol = "AAPL"
-
-# Create a Ticker object
 ticker = yf.Ticker(ticker_symbol)
+period = "5d"
 
-# Fetch historical market data
-historical_data = ticker.history(period="1y")  # data for the last year
-print("Historical Data:")
+historical_data = ticker.history(period)
+print()
+print("Price data for " + ticker_symbol + " over " + period)
 print(historical_data)
 
-# Fetch basic financials
-financials = ticker.financials
-print("\nFinancials:")
-print(financials)
+# financials = ticker.financials
+# print("\nFinancials:")
+# print(financials)
 
-# Fetch stock actions like dividends and splits
-actions = ticker.actions
-print("\nStock Actions:")
-print(actions)
+# Step 2: Plot just the closing price
+plt.figure(figsize=(14, 7))  # Good balance for most stock/crypto charts
+plt.plot(historical_data.index, historical_data["Close"], label="Close Price", color="blue", linewidth=2)
+
+# Formatting
+plt.title(f"{ticker_symbol} Closing Price - Last {period}")
+plt.xlabel("Date")
+plt.ylabel("Price (USD)")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+# Show the plot
+plt.show()
